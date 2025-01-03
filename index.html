@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فرم تماس</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        form {
+            display: inline-block;
+            text-align: left;
+            margin: 20px;
+        }
+
+        input, textarea {
+            width: 300px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2>فرم تماس</h2>
+    <form id="contactForm">
+        <label for="name">نام شما:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="email">ایمیل شما:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="message">پیام شما:</label><br>
+        <textarea id="message" name="message" required></textarea><br><br>
+
+        <button type="submit">ارسال</button>
+    </form>
+
+    <script>
+        document.getElementById("contactForm").addEventListener("submit", function(e) {
+            e.preventDefault(); // جلوگیری از ارسال فرم به طور معمول
+
+            // دریافت اطلاعات فرم
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const message = document.getElementById("message").value;
+
+            // آدرس API تلگرام برای ارسال پیام به کانال
+            const botToken = 7604150994:AAHwRtpEfEILR8TTlA02QptUSwF-SQC_6u0 ; // توکن بوت تلگرام خود را وارد کنید
+            const chatId = @FJDKSFJKmyformbot; // یوزرنیم کانال تلگرام خود را وارد کنید
+
+            const messageText = `
+            نام: ${name}
+            ایمیل: ${email}
+            پیام: ${message}
+            `;
+
+            const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(messageText)}`;
+
+            // ارسال اطلاعات به کانال تلگرام
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        alert("پیام با موفقیت ارسال شد!");
+                    } else {
+                        alert("خطا در ارسال پیام.");
+                    }
+                })
+                .catch(error => {
+                    alert("خطا در ارسال پیام.");
+                    console.error("Error:", error);
+                });
+        });
+    </script>
+</body>
+</html>
