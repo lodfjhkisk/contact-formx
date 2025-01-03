@@ -3,44 +3,109 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>فرم تماس ساده</title>
+  <title>فرم تماس ساده و حرفه‌ای</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      direction: rtl;
-      margin: 20px;
-    }
-    form {
-      max-width: 400px;
-      margin: 0 auto;
-    }
-    label {
-      display: block;
-      margin-top: 10px;
-      font-size: 14px;
-    }
-    input, textarea, button {
-      width: 100%;
-      margin-top: 5px;
-      padding: 10px;
-      font-size: 14px;
+    /* Reset CSS */
+    * {
+      margin: 0;
+      padding: 0;
       box-sizing: border-box;
     }
-    button {
-      margin-top: 15px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      direction: rtl;
+      background: linear-gradient(135deg, #1a1a1a, #2c3e50);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
     }
+
+    form {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 25px;
+      width: 400px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    h2 {
+      text-align: center;
+      color: #fff;
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-size: 14px;
+      color: #fff;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    input, textarea {
+      width: 100%;
+      margin-top: 8px;
+      padding: 10px;
+      font-size: 14px;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      transition: background 0.3s ease;
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    input:focus, textarea:focus {
+      background: rgba(255, 255, 255, 0.2);
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #fff;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
     button:hover {
-      background-color: #0056b3;
+      background: linear-gradient(135deg, #2575fc, #6a11cb);
+    }
+
+    #responseMessage {
+      display: none;
+      margin-top: 15px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    #responseMessage.show {
+      display: block;
     }
   </style>
 </head>
 <body>
-  <h2>فرم تماس</h2>
   <form id="contactForm">
+    <h2>فرم تماس</h2>
     <label for="name">نام:</label>
     <input type="text" id="name" name="name" placeholder="نام خود را وارد کنید" required>
 
@@ -51,7 +116,7 @@
     <textarea id="message" name="message" placeholder="پیام خود را وارد کنید" rows="5" required></textarea>
 
     <button type="submit">ارسال</button>
-    <p id="responseMessage" style="display: none; color: green; font-weight: bold; margin-top: 10px;"></p>
+    <p id="responseMessage"></p>
   </form>
 
   <script>
@@ -85,20 +150,20 @@
       })
         .then((response) => {
           if (response.ok) {
-            responseMessage.style.display = "block";
             responseMessage.textContent = "پیام با موفقیت ارسال شد!";
-            responseMessage.style.color = "green";
+            responseMessage.style.color = "#4caf50";
+            responseMessage.classList.add("show");
           } else {
-            responseMessage.style.display = "block";
             responseMessage.textContent = "ارسال پیام با مشکل مواجه شد. دوباره تلاش کنید.";
-            responseMessage.style.color = "red";
+            responseMessage.style.color = "#f44336";
+            responseMessage.classList.add("show");
           }
         })
         .catch((error) => {
           console.error("Error:", error);
-          responseMessage.style.display = "block";
           responseMessage.textContent = "خطایی رخ داد. لطفاً دوباره تلاش کنید.";
-          responseMessage.style.color = "red";
+          responseMessage.style.color = "#f44336";
+          responseMessage.classList.add("show");
         });
     });
   </script>
