@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>فرم تماس ریسپانسیو</title>
+  <title>فرم تماس </title>
   <link href="https://fonts.googleapis.com/css2?family=Vazir&display=swap" rel="stylesheet">
   <style>
     /* Reset CSS */
@@ -109,6 +109,11 @@
       display: block;
     }
 
+    /* استایل فیلد مخفی */
+    .hidden-field {
+      display: none;
+    }
+
     /* Media Queries برای ریسپانسیو بودن */
     @media (max-width: 480px) {
       body {
@@ -155,6 +160,9 @@
     <label for="message">پیام:</label>
     <textarea id="message" name="message" placeholder="پیام خود را وارد کنید" rows="5" required></textarea>
 
+    <!-- فیلد مخفی برای تشخیص ربات‌ها -->
+    <input type="text" id="hiddenField" name="hiddenField" class="hidden-field">
+
     <button type="submit">ارسال</button>
     <p id="responseMessage"></p>
   </form>
@@ -165,6 +173,14 @@
 
     document.getElementById("contactForm").addEventListener("submit", function (e) {
       e.preventDefault();
+
+      // بررسی فیلد مخفی
+      const hiddenField = document.getElementById("hiddenField").value;
+      if (hiddenField) {
+        // اگر فیلد مخفی پر شده باشد، احتمالاً ربات است
+        alert("شما یک ربات هستید! فرم ارسال نشد.");
+        return;
+      }
 
       const name = document.getElementById("name").value;
       const email = document.getElementById("email").value;
