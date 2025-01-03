@@ -1,86 +1,106 @@
 <!DOCTYPE html>
 <html lang="fa">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>فرم تماس</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
-        }
-
-        form {
-            display: inline-block;
-            text-align: left;
-            margin: 20px;
-        }
-
-        input, textarea {
-            width: 300px;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>فرم تماس ساده</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      direction: rtl;
+      margin: 20px;
+    }
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    input, textarea, button {
+      width: 100%;
+      margin-top: 5px;
+      padding: 10px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 15px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
-    <h2>فرم تماس</h2>
-    <form id="contactForm">
-        <label for="name">نام شما:</label><br>
-        <input type="text" id="name" name="name" required><br><br>
+  <h2>فرم تماس</h2>
+  <form id="contactForm">
+    <label for="name">نام:</label>
+    <input type="text" id="name" name="name" placeholder="نام خود را وارد کنید" required>
 
-        <label for="email">ایمیل شما:</label><br>
-        <input type="email" id="email" name="email" required><br><br>
+    <label for="email">ایمیل:</label>
+    <input type="email" id="email" name="email" placeholder="ایمیل خود را وارد کنید" required>
 
-        <label for="message">پیام شما:</label><br>
-        <textarea id="message" name="message" required></textarea><br><br>
+    <label for="message">پیام:</label>
+    <textarea id="message" name="message" placeholder="پیام خود را وارد کنید" rows="5" required></textarea>
 
-        <button type="submit">ارسال</button>
-    </form>
+    <button type="submit">ارسال</button>
+    <p id="responseMessage" style="display: none; color: green; font-weight: bold; margin-top: 10px;"></p>
+  </form>
 
-    <script>
-        document.getElementById("contactForm").addEventListener("submit", function(e) {
-            e.preventDefault(); // جلوگیری از ارسال فرم به طور معمول
+  <script>
+    const botToken = "7604150994:AAHwRtpEfEILR8TTlA02QptUSwF-SQC_6u0";
+    const chatId = "@FJDKSFJKmyform";
 
-            // دریافت اطلاعات فرم
-            const name = document.getElementById("name").value;
-            const email = document.getElementById("email").value;
-            const message = document.getElementById("message").value;
+    document.getElementById("contactForm").addEventListener("submit", function (e) {
+      e.preventDefault();
 
-            // آدرس API تلگرام برای ارسال پیام به کانال
-            const botToken = 7604150994:AAHwRtpEfEILR8TTlA02QptUSwF-SQC_6u0 ; // توکن بوت تلگرام خود را وارد کنید
-            const chatId = @FJDKSFJKmyformbot; // یوزرنیم کانال تلگرام خود را وارد کنید
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const message = document.getElementById("message").value;
+      const responseMessage = document.getElementById("responseMessage");
 
-            const messageText = `
-            نام: ${name}
-            ایمیل: ${email}
-            پیام: ${message}
-            `;
+      const telegramMessage = `
+        🔔 فرم تماس جدید:
+        ✏️ نام: ${name}
+        📧 ایمیل: ${email}
+        💬 پیام: ${message}
+      `;
 
-            const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(messageText)}`;
-
-            // ارسال اطلاعات به کانال تلگرام
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.ok) {
-                        alert("پیام با موفقیت ارسال شد!");
-                    } else {
-                        alert("خطا در ارسال پیام.");
-                    }
-                })
-                .catch(error => {
-                    alert("خطا در ارسال پیام.");
-                    console.error("Error:", error);
-                });
+      fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: telegramMessage,
+        }),
+      })
+        .then((response) => {
+          if (response.ok) {
+            responseMessage.style.display = "block";
+            responseMessage.textContent = "پیام با موفقیت ارسال شد!";
+            responseMessage.style.color = "green";
+          } else {
+            responseMessage.style.display = "block";
+            responseMessage.textContent = "ارسال پیام با مشکل مواجه شد. دوباره تلاش کنید.";
+            responseMessage.style.color = "red";
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          responseMessage.style.display = "block";
+          responseMessage.textContent = "خطایی رخ داد. لطفاً دوباره تلاش کنید.";
+          responseMessage.style.color = "red";
         });
-    </script>
+    });
+  </script>
 </body>
 </html>
